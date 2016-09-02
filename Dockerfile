@@ -2,17 +2,9 @@ FROM ubuntu
 MAINTAINER leifj@sunet.se
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN apt-get update
-RUN apt-get -y install apache2 libapache2-mod-shib2 ssl-cert augeas-tools php-pear libapache2-mod-php5
-RUN pear install HTTP_Client
-RUN a2enmod rewrite
-RUN a2enmod ssl
-RUN a2enmod shib2
-RUN a2enmod proxy
-RUN a2enmod proxy_http
-RUN a2enmod proxy_balancer
-RUN a2enmod lbmethod_byrequests
-RUN a2enmod headers
-RUN a2enmod cgi
+RUN apt-get -y install apache2 libapache2-mod-shib2 ssl-cert augeas-tools
+RUN a2dismod mpm_prefork mpm_worker
+RUN a2enmod rewrite ssl shib2 proxy proxy_http proxy_balancer lbmethod_byrequests headers cgi mpm_event
 ENV SP_HOSTNAME ac.example.com
 ENV SP_CONTACT noc@nordu.net
 ENV SP_ABOUT /about
